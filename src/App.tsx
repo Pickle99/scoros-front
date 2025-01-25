@@ -4,6 +4,7 @@ import './index.css';
 function App() {
   const [file1, setFile1] = useState<File | null>(null);
   const [file2, setFile2] = useState<File | null>(null);
+  const [sortOrder, setSortOrder] = useState<string>('top');
   const [output1Url, setOutput1Url] = useState<string>('');
   const [output2Url, setOutput2Url] = useState<string>('');
   const [error, setError] = useState<string>('');
@@ -29,6 +30,7 @@ function App() {
     const formData = new FormData();
     formData.append('input1', file1);
     formData.append('input2', file2);
+    formData.append('sortOrder', sortOrder);
 
     try {
       const response = await fetch('http://localhost:8000/compare', {
@@ -70,6 +72,18 @@ function App() {
             onChange={(e) => handleFileChange(e, setFile2)}
           />
         </div>
+        <div className="form-group">
+          <label htmlFor="sortOrder">Sort Special Characters:</label>
+          <select
+            id="sortOrder"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="select"
+          >
+            <option value="top">Special Characters at the Top</option>
+            <option value="bottom">Special Characters at the End</option>
+          </select>
+        </div>
         {error && <p className="error">{error}</p>}
         <button type="submit" className="button">
           Compare Files
@@ -89,8 +103,8 @@ function App() {
         {output2Url && (
           <a
             href={`http://localhost:8000/${output2Url}`}
-            target='_blank'
             download
+            target="_blank"
             className="download-link"
           >
             Download File 2 (Unique to File 2)
