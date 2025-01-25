@@ -9,3 +9,5 @@ and write
 
 npm run dev
 
+
+!! Only txt files are allowed !!
