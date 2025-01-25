@@ -8,6 +8,7 @@ function App() {
   const [output1Url, setOutput1Url] = useState<string>('');
   const [output2Url, setOutput2Url] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const [messageText, setMessageText] = useState<boolean>(false);
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -45,6 +46,7 @@ function App() {
       const result = await response.json();
       setOutput1Url(result.output_file1);
       setOutput2Url(result.output_file2);
+      if(result.output_file1 === null && result.output_file1 === null) setMessageText(true)
     } catch (err: any) {
       setError(err.message || 'An unknown error occurred.');
     }
@@ -109,6 +111,9 @@ function App() {
           >
             Download File 2 (Unique to File 2)
           </a>
+        )}
+        {messageText && (
+          <p>Both inputs are the same, nothing unique has been found.</p>
         )}
       </div>
     </div>
