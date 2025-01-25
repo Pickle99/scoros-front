@@ -1,12 +1,12 @@
-import { useState } from 'react'
-import './index.css'
+import { useState } from 'react';
+import './index.css';
 
 function App() {
   const [file1, setFile1] = useState<File | null>(null);
   const [file2, setFile2] = useState<File | null>(null);
-  const [output1Url, setOutput1Url] = useState<string>("");
-  const [output2Url, setOutput2Url] = useState<string>("");
-  const [error, setError] = useState<string>("");
+  const [output1Url, setOutput1Url] = useState<string>('');
+  const [output2Url, setOutput2Url] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -19,32 +19,32 @@ function App() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError("");
+    setError('');
 
     if (!file1 || !file2) {
-      setError("Please upload both files.");
+      setError('Please upload both files.');
       return;
     }
 
     const formData = new FormData();
-    formData.append("file1", file1);
-    formData.append("file2", file2);
+    formData.append('input1', file1);
+    formData.append('input2', file2);
 
     try {
-      const response = await fetch("http://localhost:8000/compare", {
-        method: "POST",
+      const response = await fetch('http://localhost:8000/compare', {
+        method: 'POST',
         body: formData,
       });
 
       if (!response.ok) {
-        throw new Error("Failed to process files.");
+        throw new Error('Failed to process files.');
       }
 
       const result = await response.json();
-      setOutput1Url(result.output1Url);
-      setOutput2Url(result.output2Url);
+      setOutput1Url(result.output_file1);
+      setOutput2Url(result.output_file2);
     } catch (err: any) {
-      setError(err.message || "An unknown error occurred.");
+      setError(err.message || 'An unknown error occurred.');
     }
   };
 
@@ -80,6 +80,7 @@ function App() {
           <a
             href={`http://localhost:8000/${output1Url}`}
             download
+            target="_blank"
             className="download-link"
           >
             Download File 1 (Unique to File 1)
@@ -88,6 +89,7 @@ function App() {
         {output2Url && (
           <a
             href={`http://localhost:8000/${output2Url}`}
+            target='_blank'
             download
             className="download-link"
           >
@@ -99,4 +101,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
